@@ -4,6 +4,8 @@ namespace WindowCapture
 {
     public class WindowData
     {
+        #region Public Properties
+
         public string MainWindowTitle
         {
             get;
@@ -13,6 +15,10 @@ namespace WindowCapture
         {
             get;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public WindowData(Process process)
         {
@@ -24,5 +30,7 @@ namespace WindowCapture
         {
             return MainWindowTitle;
         }
+
+        #endregion
     }
 }

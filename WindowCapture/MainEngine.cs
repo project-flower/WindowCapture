@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Win32Api;
 
@@ -16,6 +17,37 @@ namespace WindowCapture
             CopyFromScreen,
             Handle,
             PrintWindow
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private class HdcManager : IDisposable
+        {
+            private Graphics graphics;
+            private Stack<IntPtr> handles;
+
+            public HdcManager(Graphics graphics)
+            {
+                this.graphics = graphics;
+                handles = new Stack<IntPtr>();
+            }
+
+            public IntPtr GetHdc()
+            {
+                IntPtr result = graphics.GetHdc();
+                handles.Push(result);
+                return result;
+            }
+
+            public void Dispose()
+            {
+                while (handles.Count > 0)
+                {
+                    graphics.ReleaseHdc(handles.Pop());
+                }
+            }
         }
 
         #endregion
@@ -35,19 +67,56 @@ namespace WindowCapture
 
         public static Image Capture(Mode mode, IntPtr handle, string fileName, bool requirePreview)
         {
-            Image result = null;
+            RECT rect;
 
-            switch (mode)
+            if (!User32.GetWindowRect(handle, out rect))
             {
-                case Mode.CopyFromScreen:
-                    result = captureByCopyFromScreen(handle, fileName, requirePreview);
-                    break;
-                case Mode.Handle:
-                    result = captureByHandle(handle, fileName, requirePreview);
-                    break;
-                case Mode.PrintWindow:
-                    result = captureByPrintWindow(handle, fileName, requirePreview);
-                    break;
+                throw new Exception(PlatformMessage.Get(Marshal.GetLastWin32Error()));
+            }
+
+            Rectangle rectangle;
+
+            if (mode == Mode.CopyFromScreen)
+            {
+                int left = (rect.Left + frameBorderSize.Width - 1);
+                rectangle = new Rectangle(left, rect.Top, (rect.Right - left - frameBorderSize.Width + 1), (rect.Bottom - rect.Top - frameBorderSize.Height + 1));
+            }
+            else
+            {
+                rectangle = new Rectangle(rect.Left, rect.Top, (rect.Right - rect.Left), (rect.Bottom - rect.Top));
+            }
+
+            var result = new Bitmap(rectangle.Width, rectangle.Height);
+
+            try
+            {
+                switch (mode)
+                {
+                    case Mode.CopyFromScreen:
+                        captureByCopyFromScreen(rectangle, result);
+                        break;
+                    case Mode.Handle:
+                        captureByHandle(handle, result);
+                        break;
+                    case Mode.PrintWindow:
+                        captureByPrintWindow(handle, result);
+                        break;
+                    default:
+                        return null;
+                }
+
+                result.Save(fileName, ImageFormat.Png);
+            }
+            catch
+            {
+                result.Dispose();
+                throw;
+            }
+
+            if (!requirePreview)
+            {
+                result.Dispose();
+                result = null;
             }
 
             return result;
@@ -57,106 +126,33 @@ namespace WindowCapture
 
         #region Private Methods
 
-        private static Image captureByCopyFromScreen(IntPtr handle, string fileName, bool requirePreview)
+        private static void captureByCopyFromScreen(Rectangle rectangle, Bitmap bitmap)
         {
-            RECT rect;
-
-            if (!User32.GetWindowRect(handle, out rect))
-            {
-                throw new IOException("ウィンドウ サイズが取得できません。");
-            }
-
-            Bitmap bitmap;
-
-            try
-            {
-                bitmap = new Bitmap((rect.Right - rect.Left - ((frameBorderSize.Width - 1) * 2)), (rect.Bottom - rect.Top - (frameBorderSize.Height - 1)));
-            }
-            catch
-            {
-                throw;
-            }
-
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
                 try
                 {
-                    graphics.CopyFromScreen((rect.Left + frameBorderSize.Width - 1), rect.Top, 0, 0, bitmap.Size);
+                    graphics.CopyFromScreen(rectangle.Left, rectangle.Top, 0, 0, bitmap.Size);
                 }
                 catch
                 {
                     throw;
                 }
             }
-
-            try
-            {
-                bitmap.Save(fileName, ImageFormat.Png);
-            }
-            catch
-            {
-                throw;
-            }
-
-            if (!requirePreview)
-            {
-                try
-                {
-                    bitmap.Dispose();
-                }
-                catch
-                {
-                }
-
-                bitmap = null;
-            }
-
-            return bitmap;
         }
 
-        private static Image captureByHandle(IntPtr handle, string fileName, bool requirePreview)
+        private static void captureByHandle(IntPtr handle, Bitmap bitmap)
         {
-            RECT rect;
-
-            if (!User32.GetWindowRect(handle, out rect))
-            {
-                throw new IOException("ウィンドウ サイズが取得できません。");
-            }
-
-            Bitmap bitmap;
-
-            try
-            {
-                bitmap = new Bitmap((rect.Right - rect.Left), (rect.Bottom - rect.Top));
-            }
-            catch
-            {
-                throw;
-            }
-
             using (Graphics graphicsSource = Graphics.FromHwnd(handle))
             using (Graphics graphicsDest = Graphics.FromImage(bitmap))
+            using (var managerSource = new HdcManager(graphicsSource))
+            using (var managerDest = new HdcManager(graphicsDest))
             {
                 try
                 {
-                    IntPtr source = graphicsSource.GetHdc();
-                    IntPtr dest = graphicsDest.GetHdc();
-
-                    try
+                    if (!Gdi32.BitBlt(managerDest.GetHdc(), 0, 0, bitmap.Width, bitmap.Height, managerSource.GetHdc(), 0, 0, WinGdi.SRCCOPY))
                     {
-                        if (!Gdi32.BitBlt(dest, 0, 0, bitmap.Width, bitmap.Height, source, 0, 0, WinGdi.SRCCOPY))
-                        {
-                            throw new IOException();
-                        }
-                    }
-                    catch
-                    {
-                        throw;
-                    }
-                    finally
-                    {
-                        graphicsSource.ReleaseHdc(source);
-                        graphicsDest.ReleaseHdc(dest);
+                        throw new Exception(PlatformMessage.Get(Marshal.GetLastWin32Error()));
                     }
                 }
                 catch
@@ -164,97 +160,24 @@ namespace WindowCapture
                     throw;
                 }
             }
-
-            try
-            {
-                bitmap.Save(fileName, ImageFormat.Png);
-            }
-            catch
-            {
-                throw;
-            }
-
-            if (!requirePreview)
-            {
-                try
-                {
-                    bitmap.Dispose();
-                }
-                catch
-                {
-                }
-
-                bitmap = null;
-            }
-
-            return bitmap;
         }
 
-        private static Image captureByPrintWindow(IntPtr handle, string fileName, bool requirePreview)
+        private static Image captureByPrintWindow(IntPtr handle, Bitmap bitmap)
         {
-            RECT rect;
-
-            if (!User32.GetWindowRect(handle, out rect))
-            {
-                throw new IOException("ウィンドウ サイズが取得できません。");
-            }
-
-            Bitmap bitmap;
-
-            try
-            {
-                bitmap = new Bitmap((rect.Right - rect.Left), (rect.Bottom - rect.Top));
-            }
-            catch
-            {
-                throw;
-            }
-
             using (Graphics graphics = Graphics.FromImage(bitmap))
+            using (var manager = new HdcManager(graphics))
             {
                 try
                 {
-                    IntPtr dc = graphics.GetHdc();
-
-                    try
+                    if (!User32.PrintWindow(handle, manager.GetHdc(), 0))
                     {
-                        User32.PrintWindow(handle, dc, 0);
-                    }
-                    catch
-                    {
-                        throw;
-                    }
-                    finally
-                    {
-                        graphics.ReleaseHdc(dc);
+                        throw new Exception("画像が取得できませんでした。");
                     }
                 }
                 catch
                 {
                     throw;
                 }
-            }
-
-            try
-            {
-                bitmap.Save(fileName, ImageFormat.Png);
-            }
-            catch
-            {
-                throw;
-            }
-
-            if (!requirePreview)
-            {
-                try
-                {
-                    bitmap.Dispose();
-                }
-                catch
-                {
-                }
-
-                bitmap = null;
             }
 
             return bitmap;

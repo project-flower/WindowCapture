@@ -52,10 +52,10 @@ namespace WindowCapture
 
                 fileName = Path.Combine(directoryName, fileName);
                 int previewInterval = (int)numericUpDownPreviewTime.Value;
-                bool requireInterval = (previewInterval > 0);
-                Image image = MainEngine.Capture((MainEngine.Mode)comboBoxMode.SelectedItem, (listBoxWindows.SelectedItem as WindowData).Process.MainWindowHandle, fileName, requireInterval);
+                bool requirePreview = (previewInterval > 0);
+                Image image = MainEngine.Capture((MainEngine.Mode)comboBoxMode.SelectedItem, (listBoxWindows.SelectedItem as WindowData).Process.MainWindowHandle, fileName, requirePreview);
 
-                if (requireInterval)
+                if (requirePreview)
                 {
                     if (image != null)
                     {
