@@ -73,6 +73,12 @@ namespace WindowCapture
 
         private void formClosing(object sender, FormClosingEventArgs e)
         {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+
             disposeImage();
         }
 
