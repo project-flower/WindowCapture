@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace WindowCapture
@@ -83,15 +85,24 @@ namespace WindowCapture
                 return;
             }
 
-            foreach (Process process in processes)
-            {
-                if (string.IsNullOrEmpty(process.MainWindowTitle))
-                {
-                    continue;
-                }
+            var list = new List<WindowData>();
 
-                listBoxWindows.Items.Add(new WindowData(process));
-            }
+            Array.ForEach(processes, n =>
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(n.MainWindowTitle))
+                    {
+                        list.Add(new WindowData(n));
+                    }
+                }
+                catch
+                {
+                }
+            });
+
+            list = list.OrderBy(n => n.ToString()).ToList();
+            list.ForEach(n => listBoxWindows.Items.Add(n));
         }
 
         void showErrorMessage(string message)
