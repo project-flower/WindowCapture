@@ -58,6 +58,8 @@ namespace WindowCapture
 
         private void disposeImage()
         {
+            pictureBox.Image = null;
+
             if (image != null)
             {
                 image.Dispose();
