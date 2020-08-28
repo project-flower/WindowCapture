@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -7,6 +8,14 @@ namespace WindowCapture
 {
     public partial class FormMain : Form
     {
+        #region Private Fields
+
+        private FormPreview formPreview;
+
+        #endregion
+
+        #region Public Methods
+
         public FormMain()
         {
             InitializeComponent();
@@ -14,7 +23,12 @@ namespace WindowCapture
             comboBoxMode.Items.Add(MainEngine.Mode.CopyFromScreen);
             comboBoxMode.Items.Add(MainEngine.Mode.PrintWindow);
             comboBoxMode.SelectedIndex = 0;
+            formPreview = new FormPreview();
         }
+
+        #endregion
+
+        #region Private Methods
 
         private void capture()
         {
@@ -37,7 +51,17 @@ namespace WindowCapture
                 }
 
                 fileName = Path.Combine(directoryName, fileName);
-                MainEngine.Capture((MainEngine.Mode)comboBoxMode.SelectedItem, (listBoxWindows.SelectedItem as WindowData).Process.MainWindowHandle, fileName);
+                int previewInterval = (int)numericUpDownPreviewTime.Value;
+                bool requireInterval = (previewInterval > 0);
+                Image image = MainEngine.Capture((MainEngine.Mode)comboBoxMode.SelectedItem, (listBoxWindows.SelectedItem as WindowData).Process.MainWindowHandle, fileName, requireInterval);
+
+                if (requireInterval)
+                {
+                    if (image != null)
+                    {
+                        formPreview.Show(this, image, previewInterval);
+                    }
+                }
             }
             catch (Exception exception)
             {
@@ -79,6 +103,10 @@ namespace WindowCapture
         {
             return MessageBox.Show(this, message, Text, messageBoxButtons, messageBoxIcon);
         }
+
+        #endregion
+
+        // Designer Methods
 
         private void buttonCapture_Click(object sender, System.EventArgs e)
         {

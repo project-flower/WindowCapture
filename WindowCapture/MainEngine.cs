@@ -9,6 +9,8 @@ namespace WindowCapture
 {
     public static class MainEngine
     {
+        #region Public Classes
+
         public enum Mode
         {
             CopyFromScreen,
@@ -16,30 +18,46 @@ namespace WindowCapture
             PrintWindow
         }
 
+        #endregion
+
+        #region Private Fields
+
         private static readonly Size frameBorderSize;
+
+        #endregion
+
+        #region Public Methods
 
         static MainEngine()
         {
             frameBorderSize = SystemInformation.FrameBorderSize;
         }
 
-        public static void Capture(Mode mode, IntPtr handle, string fileName)
+        public static Image Capture(Mode mode, IntPtr handle, string fileName, bool requirePreview)
         {
+            Image result = null;
+
             switch (mode)
             {
                 case Mode.CopyFromScreen:
-                    captureByCopyFromScreen(handle, fileName);
+                    result = captureByCopyFromScreen(handle, fileName, requirePreview);
                     break;
                 case Mode.Handle:
-                    captureByHandle(handle, fileName);
+                    result = captureByHandle(handle, fileName, requirePreview);
                     break;
                 case Mode.PrintWindow:
-                    captureByPrintWindow(handle, fileName);
+                    result = captureByPrintWindow(handle, fileName, requirePreview);
                     break;
             }
+
+            return result;
         }
 
-        private static void captureByCopyFromScreen(IntPtr handle, string fileName)
+        #endregion
+
+        #region Private Methods
+
+        private static Image captureByCopyFromScreen(IntPtr handle, string fileName, bool requirePreview)
         {
             RECT rect;
 
@@ -79,9 +97,24 @@ namespace WindowCapture
             {
                 throw;
             }
+
+            if (!requirePreview)
+            {
+                try
+                {
+                    bitmap.Dispose();
+                }
+                catch
+                {
+                }
+
+                bitmap = null;
+            }
+
+            return bitmap;
         }
 
-        private static void captureByHandle(IntPtr handle, string fileName)
+        private static Image captureByHandle(IntPtr handle, string fileName, bool requirePreview)
         {
             RECT rect;
 
@@ -140,9 +173,24 @@ namespace WindowCapture
             {
                 throw;
             }
+
+            if (!requirePreview)
+            {
+                try
+                {
+                    bitmap.Dispose();
+                }
+                catch
+                {
+                }
+
+                bitmap = null;
+            }
+
+            return bitmap;
         }
 
-        private static void captureByPrintWindow(IntPtr handle, string fileName)
+        private static Image captureByPrintWindow(IntPtr handle, string fileName, bool requirePreview)
         {
             RECT rect;
 
@@ -195,6 +243,23 @@ namespace WindowCapture
             {
                 throw;
             }
+
+            if (!requirePreview)
+            {
+                try
+                {
+                    bitmap.Dispose();
+                }
+                catch
+                {
+                }
+
+                bitmap = null;
+            }
+
+            return bitmap;
         }
+
+        #endregion
     }
 }

@@ -35,7 +35,10 @@
             this.comboBoxOutputDirectory = new System.Windows.Forms.ComboBox();
             this.labelMode = new System.Windows.Forms.Label();
             this.comboBoxMode = new System.Windows.Forms.ComboBox();
+            this.labelPreview = new System.Windows.Forms.Label();
+            this.numericUpDownPreviewTime = new System.Windows.Forms.NumericUpDown();
             this.buttonCapture = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPreviewTime)).BeginInit();
             this.SuspendLayout();
             // 
             // labelWindows
@@ -110,13 +113,37 @@
             this.comboBoxMode.Size = new System.Drawing.Size(121, 20);
             this.comboBoxMode.TabIndex = 7;
             // 
+            // labelPreview
+            // 
+            this.labelPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelPreview.AutoSize = true;
+            this.labelPreview.Location = new System.Drawing.Point(235, 418);
+            this.labelPreview.Name = "labelPreview";
+            this.labelPreview.Size = new System.Drawing.Size(86, 12);
+            this.labelPreview.TabIndex = 8;
+            this.labelPreview.Text = "&Preview (msec):";
+            // 
+            // numericUpDownPreviewTime
+            // 
+            this.numericUpDownPreviewTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numericUpDownPreviewTime.Location = new System.Drawing.Point(327, 416);
+            this.numericUpDownPreviewTime.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.numericUpDownPreviewTime.Name = "numericUpDownPreviewTime";
+            this.numericUpDownPreviewTime.Size = new System.Drawing.Size(120, 19);
+            this.numericUpDownPreviewTime.TabIndex = 9;
+            this.numericUpDownPreviewTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // buttonCapture
             // 
             this.buttonCapture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCapture.Location = new System.Drawing.Point(713, 415);
             this.buttonCapture.Name = "buttonCapture";
             this.buttonCapture.Size = new System.Drawing.Size(75, 23);
-            this.buttonCapture.TabIndex = 8;
+            this.buttonCapture.TabIndex = 10;
             this.buttonCapture.Text = "&Capture";
             this.buttonCapture.UseVisualStyleBackColor = true;
             this.buttonCapture.Click += new System.EventHandler(this.buttonCapture_Click);
@@ -127,6 +154,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.buttonCapture);
+            this.Controls.Add(this.numericUpDownPreviewTime);
+            this.Controls.Add(this.labelPreview);
             this.Controls.Add(this.comboBoxMode);
             this.Controls.Add(this.labelMode);
             this.Controls.Add(this.comboBoxOutputDirectory);
@@ -137,6 +166,7 @@
             this.Name = "FormMain";
             this.Text = "Window Capture";
             this.Load += new System.EventHandler(this.load);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPreviewTime)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -151,6 +181,8 @@
         private System.Windows.Forms.ComboBox comboBoxOutputDirectory;
         private System.Windows.Forms.Label labelMode;
         private System.Windows.Forms.ComboBox comboBoxMode;
+        private System.Windows.Forms.Label labelPreview;
+        private System.Windows.Forms.NumericUpDown numericUpDownPreviewTime;
         private System.Windows.Forms.Button buttonCapture;
     }
 }
