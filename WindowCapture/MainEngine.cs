@@ -55,6 +55,7 @@ namespace WindowCapture
         #region Private Fields
 
         private static readonly Size frameBorderSize;
+        private static readonly int osVersion;
 
         #endregion
 
@@ -63,6 +64,7 @@ namespace WindowCapture
         static MainEngine()
         {
             frameBorderSize = SystemInformation.FrameBorderSize;
+            osVersion = Environment.OSVersion.Version.Major;
         }
 
         public static Image Capture(Mode mode, IntPtr handle, string fileName, bool requirePreview)
@@ -76,7 +78,7 @@ namespace WindowCapture
 
             Rectangle rectangle;
 
-            if (mode == Mode.CopyFromScreen)
+            if ((mode == Mode.CopyFromScreen) && (osVersion > 5))
             {
                 int left = (rect.Left + frameBorderSize.Width - 1);
                 rectangle = new Rectangle(left, rect.Top, (rect.Right - left - frameBorderSize.Width + 1), (rect.Bottom - rect.Top - frameBorderSize.Height + 1));
