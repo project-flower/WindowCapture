@@ -70,6 +70,7 @@
     <Compile Include="Win32Api\WinGdi.h.cs" />
     <Compile Include="Win32Api\WinUser.h.cs" />
     <Compile Include="WindowData.cs" />
+    <Compile Include="WindowManager.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System;
 
 namespace WindowCapture
 {
@@ -6,12 +6,12 @@ namespace WindowCapture
     {
         #region Public Properties
 
-        public string MainWindowTitle
+        public IntPtr Handle
         {
             get;
         }
 
-        public Process Process
+        public string Title
         {
             get;
         }
@@ -20,15 +20,15 @@ namespace WindowCapture
 
         #region Public Methods
 
-        public WindowData(Process process)
+        public WindowData(IntPtr handle, string title)
         {
-            MainWindowTitle = process.MainWindowTitle;
-            Process = process;
+            Handle = handle;
+            Title = title;
         }
 
         public override string ToString()
         {
-            return MainWindowTitle;
+            return Title;
         }
 
         #endregion

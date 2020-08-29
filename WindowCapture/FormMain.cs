@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -55,7 +53,7 @@ namespace WindowCapture
                 fileName = Path.Combine(directoryName, fileName);
                 int previewInterval = (int)numericUpDownPreviewTime.Value;
                 bool requirePreview = (previewInterval > 0);
-                Image image = MainEngine.Capture((MainEngine.Mode)comboBoxMode.SelectedItem, (listBoxWindows.SelectedItem as WindowData).Process.MainWindowHandle, fileName, requirePreview);
+                Image image = MainEngine.Capture((MainEngine.Mode)comboBoxMode.SelectedItem, (listBoxWindows.SelectedItem as WindowData).Handle, fileName, requirePreview);
 
                 if (requirePreview)
                 {
@@ -74,35 +72,10 @@ namespace WindowCapture
         private void refresh()
         {
             listBoxWindows.Items.Clear();
-            Process[] processes;
-
-            try
-            {
-                processes = Process.GetProcesses();
-            }
-            catch
-            {
-                return;
-            }
-
-            var list = new List<WindowData>();
-
-            Array.ForEach(processes, n =>
-            {
-                try
-                {
-                    if (!string.IsNullOrEmpty(n.MainWindowTitle))
-                    {
-                        list.Add(new WindowData(n));
-                    }
-                }
-                catch
-                {
-                }
-            });
-
-            list = list.OrderBy(n => n.ToString()).ToList();
-            list.ForEach(n => listBoxWindows.Items.Add(n));
+            WindowData[] windows = WindowManager.GetWindows();
+            listBoxWindows.Items.Clear();
+            windows = windows.OrderBy(n => n.ToString()).ToArray();
+            Array.ForEach(windows, n => listBoxWindows.Items.Add(n));
         }
 
         void showErrorMessage(string message)
