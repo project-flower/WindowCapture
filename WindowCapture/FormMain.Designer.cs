@@ -136,6 +136,11 @@
             this.numericUpDownPreviewTime.Size = new System.Drawing.Size(120, 19);
             this.numericUpDownPreviewTime.TabIndex = 9;
             this.numericUpDownPreviewTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.numericUpDownPreviewTime.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
             // 
             // buttonCapture
             // 
