@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>WindowCapture.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>WindowCapture.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>WindowCapture.ico</ApplicationIcon>
@@ -68,13 +70,13 @@
     <Compile Include="PlatformMessage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Win32Api\Gdi32.cs" />
-    <Compile Include="Win32Api\Kernel32.cs" />
-    <Compile Include="Win32Api\User32.cs" />
-    <Compile Include="Win32Api\WinBase.h.cs" />
-    <Compile Include="Win32Api\WinDef.h.cs" />
-    <Compile Include="Win32Api\WinGdi.h.cs" />
-    <Compile Include="Win32Api\WinUser.h.cs" />
+    <Compile Include="NativeMethods\Gdi32.cs" />
+    <Compile Include="NativeMethods\Kernel32.cs" />
+    <Compile Include="NativeMethods\User32.cs" />
+    <Compile Include="NativeMethods\WinBase.h.cs" />
+    <Compile Include="NativeMethods\WinDef.h.cs" />
+    <Compile Include="NativeMethods\WinGdi.h.cs" />
+    <Compile Include="NativeMethods\WinUser.h.cs" />
     <Compile Include="WindowData.cs" />
     <Compile Include="WindowManager.cs" />
     <EmbeddedResource Include="FormMain.resx">

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using NativeMethods;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Win32Api;
 
 namespace WindowCapture
 {
@@ -25,8 +25,8 @@ namespace WindowCapture
 
         private class HdcManager : IDisposable
         {
-            private Graphics graphics;
-            private Stack<IntPtr> handles;
+            private readonly Graphics graphics;
+            private readonly Stack<IntPtr> handles;
 
             public HdcManager(Graphics graphics)
             {
@@ -69,9 +69,7 @@ namespace WindowCapture
 
         public static Image Capture(Mode mode, IntPtr handle, string fileName, bool requirePreview)
         {
-            RECT rect;
-
-            if (!User32.GetWindowRect(handle, out rect))
+            if (!User32.GetWindowRect(handle, out RECT rect))
             {
                 throw new Exception(PlatformMessage.Get(Marshal.GetLastWin32Error()));
             }
@@ -95,13 +93,13 @@ namespace WindowCapture
                 switch (mode)
                 {
                     case Mode.CopyFromScreen:
-                        captureByCopyFromScreen(rectangle, result);
+                        CaptureWithCopyFromScreen(rectangle, result);
                         break;
                     case Mode.Handle:
-                        captureByHandle(handle, result);
+                        CaptureWithHandle(handle, result);
                         break;
                     case Mode.PrintWindow:
-                        captureByPrintWindow(handle, result);
+                        CaptureWithPrintWindow(handle, result);
                         break;
                     default:
                         return null;
@@ -128,7 +126,7 @@ namespace WindowCapture
 
         #region Private Methods
 
-        private static void captureByCopyFromScreen(Rectangle rectangle, Bitmap bitmap)
+        private static void CaptureWithCopyFromScreen(Rectangle rectangle, Bitmap bitmap)
         {
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
@@ -143,7 +141,7 @@ namespace WindowCapture
             }
         }
 
-        private static void captureByHandle(IntPtr handle, Bitmap bitmap)
+        private static void CaptureWithHandle(IntPtr handle, Bitmap bitmap)
         {
             using (Graphics graphicsSource = Graphics.FromHwnd(handle))
             using (Graphics graphicsDest = Graphics.FromImage(bitmap))
@@ -164,7 +162,7 @@ namespace WindowCapture
             }
         }
 
-        private static Image captureByPrintWindow(IntPtr handle, Bitmap bitmap)
+        private static Image CaptureWithPrintWindow(IntPtr handle, Bitmap bitmap)
         {
             using (Graphics graphics = Graphics.FromImage(bitmap))
             using (var manager = new HdcManager(graphics))

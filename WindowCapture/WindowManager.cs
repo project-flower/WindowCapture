@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NativeMethods;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using Win32Api;
 
 namespace WindowCapture
 {

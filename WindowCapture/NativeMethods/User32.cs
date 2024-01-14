@@ -1,4 +1,4 @@
-﻿namespace Win32Api
+﻿namespace NativeMethods
 {
     public static partial class User32
     {

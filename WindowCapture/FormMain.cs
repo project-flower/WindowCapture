@@ -10,7 +10,7 @@ namespace WindowCapture
     {
         #region Private Fields
 
-        private FormPreview formPreview;
+        private readonly FormPreview formPreview;
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace WindowCapture
 
         #region Private Methods
 
-        private void capture()
+        private void DoCapture()
         {
             if (listBoxWindows.SelectedIndex < 0)
             {
@@ -65,11 +65,11 @@ namespace WindowCapture
             }
             catch (Exception exception)
             {
-                showErrorMessage(exception.Message);
+                ShowErrorMessage(exception.Message);
             }
         }
 
-        private void refresh()
+        private void DoRefresh()
         {
             listBoxWindows.Items.Clear();
             WindowData[] windows = WindowManager.GetWindows();
@@ -78,12 +78,12 @@ namespace WindowCapture
             Array.ForEach(windows, n => listBoxWindows.Items.Add(n));
         }
 
-        void showErrorMessage(string message)
+        private void ShowErrorMessage(string message)
         {
-            showMessage(message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            ShowMessage(message, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        DialogResult showMessage(string message, MessageBoxButtons messageBoxButtons, MessageBoxIcon messageBoxIcon)
+        private DialogResult ShowMessage(string message, MessageBoxButtons messageBoxButtons, MessageBoxIcon messageBoxIcon)
         {
             return MessageBox.Show(this, message, Text, messageBoxButtons, messageBoxIcon);
         }
@@ -92,19 +92,19 @@ namespace WindowCapture
 
         // Designer Methods
 
-        private void buttonCapture_Click(object sender, System.EventArgs e)
+        private void buttonCapture_Click(object sender, EventArgs e)
         {
-            capture();
+            DoCapture();
         }
 
-        private void buttonRefresh_Click(object sender, System.EventArgs e)
+        private void buttonRefresh_Click(object sender, EventArgs e)
         {
-            refresh();
+            DoRefresh();
         }
 
-        private void load(object sender, System.EventArgs e)
+        private void load(object sender, EventArgs e)
         {
-            refresh();
+            DoRefresh();
             comboBoxOutputDirectory.Text = Application.StartupPath;
         }
     }

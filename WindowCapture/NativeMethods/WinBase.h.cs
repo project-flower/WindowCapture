@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Win32Api
+namespace NativeMethods
 {
     public enum FORMAT : uint
     {

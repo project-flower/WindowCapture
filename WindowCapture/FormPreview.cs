@@ -56,7 +56,7 @@ namespace WindowCapture
 
         #region Private Methods
 
-        private void disposeImage()
+        private void DisposeImage()
         {
             pictureBox.Image = null;
 
@@ -79,7 +79,7 @@ namespace WindowCapture
                 Hide();
             }
 
-            disposeImage();
+            DisposeImage();
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -91,7 +91,7 @@ namespace WindowCapture
         {
             if (!Visible)
             {
-                disposeImage();
+                DisposeImage();
             }
         }
     }

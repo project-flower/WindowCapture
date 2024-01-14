@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Win32Api
+namespace NativeMethods
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT

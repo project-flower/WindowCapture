@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NativeMethods;
+using System;
 using System.Text;
-using Win32Api;
 
 public static class PlatformMessage
 {
