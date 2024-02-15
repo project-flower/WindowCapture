@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NativeMethods;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -32,7 +33,9 @@ namespace WindowCapture
 
         private void DoCapture()
         {
-            if (listBoxWindows.SelectedIndex < 0)
+            ListView.SelectedListViewItemCollection selectedItems = listViewWindows.SelectedItems;
+
+            if (selectedItems.Count < 0)
             {
                 return;
             }
@@ -53,7 +56,7 @@ namespace WindowCapture
                 fileName = Path.Combine(directoryName, fileName);
                 int previewInterval = (int)numericUpDownPreviewTime.Value;
                 bool requirePreview = (previewInterval > 0);
-                Image image = MainEngine.Capture((MainEngine.Mode)comboBoxMode.SelectedItem, (listBoxWindows.SelectedItem as WindowData).Handle, fileName, requirePreview);
+                Image image = MainEngine.Capture((MainEngine.Mode)comboBoxMode.SelectedItem, (selectedItems[0].Tag as WindowData).Handle, fileName, requirePreview);
 
                 if (requirePreview)
                 {
@@ -71,11 +74,12 @@ namespace WindowCapture
 
         private void DoRefresh()
         {
-            listBoxWindows.Items.Clear();
+            listViewWindows.Items.Clear();
+            listViewWindows.SmallImageList.Images.Clear();
             WindowData[] windows = WindowManager.GetWindows();
-            listBoxWindows.Items.Clear();
             windows = windows.OrderBy(n => n.ToString()).ToArray();
-            Array.ForEach(windows, n => listBoxWindows.Items.Add(n));
+            Array.ForEach(windows, n => listViewWindows.Items.Add(ToListViewItem(n)));
+            listViewWindows.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void ShowErrorMessage(string message)
@@ -86,6 +90,34 @@ namespace WindowCapture
         private DialogResult ShowMessage(string message, MessageBoxButtons messageBoxButtons, MessageBoxIcon messageBoxIcon)
         {
             return MessageBox.Show(this, message, Text, messageBoxButtons, messageBoxIcon);
+        }
+
+        private ListViewItem ToListViewItem(WindowData windowData)
+        {
+            ImageList imageList = listViewWindows.SmallImageList;
+            ListViewItem result = null;
+            string title = windowData.Title;
+            IntPtr hIcon = User32.GetClassLongPtr(windowData.Handle, GCL.HICONSM);
+
+            if (hIcon != IntPtr.Zero)
+            {
+                try
+                {
+                    imageList.Images.Add(Icon.FromHandle(hIcon));
+                    result = new ListViewItem(title, (imageList.Images.Count - 1));
+                }
+                catch
+                {
+                }
+            }
+
+            if (result == null)
+            {
+                result = new ListViewItem(title);
+            }
+
+            result.Tag = windowData;
+            return result;
         }
 
         #endregion

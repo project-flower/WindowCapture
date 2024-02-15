@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.labelWindows = new System.Windows.Forms.Label();
-            this.listBoxWindows = new System.Windows.Forms.ListBox();
+            this.listViewWindows = new System.Windows.Forms.ListView();
+            this.columnHeaderTitle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.buttonRefresh = new System.Windows.Forms.Button();
             this.labelOutputDirectory = new System.Windows.Forms.Label();
             this.comboBoxOutputDirectory = new System.Windows.Forms.ComboBox();
@@ -50,17 +53,33 @@
             this.labelWindows.TabIndex = 0;
             this.labelWindows.Text = "&Window";
             // 
-            // listBoxWindows
+            // listViewWindows
             // 
-            this.listBoxWindows.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listViewWindows.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listBoxWindows.FormattingEnabled = true;
-            this.listBoxWindows.ItemHeight = 12;
-            this.listBoxWindows.Location = new System.Drawing.Point(12, 24);
-            this.listBoxWindows.Name = "listBoxWindows";
-            this.listBoxWindows.Size = new System.Drawing.Size(695, 352);
-            this.listBoxWindows.TabIndex = 1;
+            this.listViewWindows.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderTitle});
+            this.listViewWindows.FullRowSelect = true;
+            this.listViewWindows.HideSelection = false;
+            this.listViewWindows.Location = new System.Drawing.Point(12, 24);
+            this.listViewWindows.MultiSelect = false;
+            this.listViewWindows.Name = "listViewWindows";
+            this.listViewWindows.Size = new System.Drawing.Size(695, 359);
+            this.listViewWindows.SmallImageList = this.imageList;
+            this.listViewWindows.TabIndex = 1;
+            this.listViewWindows.UseCompatibleStateImageBehavior = false;
+            this.listViewWindows.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeaderTitle
+            // 
+            this.columnHeaderTitle.Text = "Title";
+            // 
+            // imageList
+            // 
+            this.imageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.imageList.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // buttonRefresh
             // 
@@ -166,7 +185,7 @@
             this.Controls.Add(this.comboBoxOutputDirectory);
             this.Controls.Add(this.labelOutputDirectory);
             this.Controls.Add(this.buttonRefresh);
-            this.Controls.Add(this.listBoxWindows);
+            this.Controls.Add(this.listViewWindows);
             this.Controls.Add(this.labelWindows);
             this.Name = "FormMain";
             this.Text = "Window Capture";
@@ -180,7 +199,8 @@
         #endregion
 
         private System.Windows.Forms.Label labelWindows;
-        private System.Windows.Forms.ListBox listBoxWindows;
+        private System.Windows.Forms.ListView listViewWindows;
+        private System.Windows.Forms.ColumnHeader columnHeaderTitle;
         private System.Windows.Forms.Button buttonRefresh;
         private System.Windows.Forms.Label labelOutputDirectory;
         private System.Windows.Forms.ComboBox comboBoxOutputDirectory;
@@ -189,6 +209,7 @@
         private System.Windows.Forms.Label labelPreview;
         private System.Windows.Forms.NumericUpDown numericUpDownPreviewTime;
         private System.Windows.Forms.Button buttonCapture;
+        private System.Windows.Forms.ImageList imageList;
     }
 }
 
