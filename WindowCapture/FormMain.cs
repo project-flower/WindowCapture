@@ -134,6 +134,24 @@ namespace WindowCapture
             DoRefresh();
         }
 
+        private void comboBoxOutputDirectory_DragDrop(object sender, DragEventArgs e)
+        {
+            if (!(e.Data.GetData(DataFormats.FileDrop) is string[] dropData) || (dropData.Length < 1))
+            {
+                return;
+            }
+
+            (sender as ComboBox).Text = dropData[0];
+        }
+
+        private void comboBoxOutputDirectory_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect
+                = (e.Data.GetDataPresent(DataFormats.FileDrop)
+                ? DragDropEffects.All
+                : DragDropEffects.None);
+        }
+
         private void load(object sender, EventArgs e)
         {
             DoRefresh();

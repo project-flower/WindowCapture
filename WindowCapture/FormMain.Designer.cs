@@ -104,6 +104,7 @@
             // 
             // comboBoxOutputDirectory
             // 
+            this.comboBoxOutputDirectory.AllowDrop = true;
             this.comboBoxOutputDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxOutputDirectory.FormattingEnabled = true;
@@ -111,6 +112,8 @@
             this.comboBoxOutputDirectory.Name = "comboBoxOutputDirectory";
             this.comboBoxOutputDirectory.Size = new System.Drawing.Size(680, 20);
             this.comboBoxOutputDirectory.TabIndex = 5;
+            this.comboBoxOutputDirectory.DragDrop += new System.Windows.Forms.DragEventHandler(this.comboBoxOutputDirectory_DragDrop);
+            this.comboBoxOutputDirectory.DragEnter += new System.Windows.Forms.DragEventHandler(this.comboBoxOutputDirectory_DragEnter);
             // 
             // labelMode
             // 
