@@ -12,6 +12,7 @@ namespace WindowCapture
         #region Private Fields
 
         private readonly FormPreview formPreview;
+        private readonly SelectDirectoryDialog selectDirectoryDialog;
 
         #endregion
 
@@ -25,6 +26,7 @@ namespace WindowCapture
             comboBoxMode.Items.Add(MainEngine.Mode.PrintWindow);
             comboBoxMode.SelectedIndex = 0;
             formPreview = new FormPreview();
+            selectDirectoryDialog = new SelectDirectoryDialog(true);
         }
 
         #endregion
@@ -124,6 +126,15 @@ namespace WindowCapture
 
         // Designer Methods
 
+        private void buttonBrowse_Click(object sender, EventArgs e)
+        {
+            selectDirectoryDialog.DirectoryName = comboBoxOutputDirectory.Text;
+
+            if (selectDirectoryDialog.ShowDialog() != DialogResult.OK) return;
+
+            comboBoxOutputDirectory.Text = selectDirectoryDialog.DirectoryName;
+        }
+
         private void buttonCapture_Click(object sender, EventArgs e)
         {
             DoCapture();
@@ -150,6 +161,11 @@ namespace WindowCapture
                 = (e.Data.GetDataPresent(DataFormats.FileDrop)
                 ? DragDropEffects.All
                 : DragDropEffects.None);
+        }
+
+        private void formClosed(object sender, FormClosedEventArgs e)
+        {
+            selectDirectoryDialog.Dispose();
         }
 
         private void load(object sender, EventArgs e)

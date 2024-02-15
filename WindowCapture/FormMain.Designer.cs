@@ -36,6 +36,7 @@
             this.buttonRefresh = new System.Windows.Forms.Button();
             this.labelOutputDirectory = new System.Windows.Forms.Label();
             this.comboBoxOutputDirectory = new System.Windows.Forms.ComboBox();
+            this.buttonBrowse = new System.Windows.Forms.Button();
             this.labelMode = new System.Windows.Forms.Label();
             this.comboBoxMode = new System.Windows.Forms.ComboBox();
             this.labelPreview = new System.Windows.Forms.Label();
@@ -65,7 +66,7 @@
             this.listViewWindows.Location = new System.Drawing.Point(12, 24);
             this.listViewWindows.MultiSelect = false;
             this.listViewWindows.Name = "listViewWindows";
-            this.listViewWindows.Size = new System.Drawing.Size(695, 359);
+            this.listViewWindows.Size = new System.Drawing.Size(695, 356);
             this.listViewWindows.SmallImageList = this.imageList;
             this.listViewWindows.TabIndex = 1;
             this.listViewWindows.UseCompatibleStateImageBehavior = false;
@@ -96,7 +97,7 @@
             // 
             this.labelOutputDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelOutputDirectory.AutoSize = true;
-            this.labelOutputDirectory.Location = new System.Drawing.Point(12, 392);
+            this.labelOutputDirectory.Location = new System.Drawing.Point(12, 391);
             this.labelOutputDirectory.Name = "labelOutputDirectory";
             this.labelOutputDirectory.Size = new System.Drawing.Size(92, 12);
             this.labelOutputDirectory.TabIndex = 4;
@@ -108,12 +109,23 @@
             this.comboBoxOutputDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxOutputDirectory.FormattingEnabled = true;
-            this.comboBoxOutputDirectory.Location = new System.Drawing.Point(108, 389);
+            this.comboBoxOutputDirectory.Location = new System.Drawing.Point(110, 388);
             this.comboBoxOutputDirectory.Name = "comboBoxOutputDirectory";
-            this.comboBoxOutputDirectory.Size = new System.Drawing.Size(680, 20);
+            this.comboBoxOutputDirectory.Size = new System.Drawing.Size(599, 20);
             this.comboBoxOutputDirectory.TabIndex = 5;
             this.comboBoxOutputDirectory.DragDrop += new System.Windows.Forms.DragEventHandler(this.comboBoxOutputDirectory_DragDrop);
             this.comboBoxOutputDirectory.DragEnter += new System.Windows.Forms.DragEventHandler(this.comboBoxOutputDirectory_DragEnter);
+            // 
+            // buttonBrowse
+            // 
+            this.buttonBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonBrowse.Location = new System.Drawing.Point(713, 386);
+            this.buttonBrowse.Name = "buttonBrowse";
+            this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowse.TabIndex = 6;
+            this.buttonBrowse.Text = "&Browse";
+            this.buttonBrowse.UseVisualStyleBackColor = true;
+            this.buttonBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
             // 
             // labelMode
             // 
@@ -122,7 +134,7 @@
             this.labelMode.Location = new System.Drawing.Point(12, 418);
             this.labelMode.Name = "labelMode";
             this.labelMode.Size = new System.Drawing.Size(34, 12);
-            this.labelMode.TabIndex = 6;
+            this.labelMode.TabIndex = 7;
             this.labelMode.Text = "&Mode:";
             // 
             // comboBoxMode
@@ -133,7 +145,7 @@
             this.comboBoxMode.Location = new System.Drawing.Point(108, 415);
             this.comboBoxMode.Name = "comboBoxMode";
             this.comboBoxMode.Size = new System.Drawing.Size(121, 20);
-            this.comboBoxMode.TabIndex = 7;
+            this.comboBoxMode.TabIndex = 8;
             // 
             // labelPreview
             // 
@@ -142,7 +154,7 @@
             this.labelPreview.Location = new System.Drawing.Point(235, 418);
             this.labelPreview.Name = "labelPreview";
             this.labelPreview.Size = new System.Drawing.Size(86, 12);
-            this.labelPreview.TabIndex = 8;
+            this.labelPreview.TabIndex = 9;
             this.labelPreview.Text = "&Preview (msec):";
             // 
             // numericUpDownPreviewTime
@@ -156,7 +168,7 @@
             0});
             this.numericUpDownPreviewTime.Name = "numericUpDownPreviewTime";
             this.numericUpDownPreviewTime.Size = new System.Drawing.Size(120, 19);
-            this.numericUpDownPreviewTime.TabIndex = 9;
+            this.numericUpDownPreviewTime.TabIndex = 10;
             this.numericUpDownPreviewTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDownPreviewTime.Value = new decimal(new int[] {
             2000,
@@ -170,7 +182,7 @@
             this.buttonCapture.Location = new System.Drawing.Point(713, 415);
             this.buttonCapture.Name = "buttonCapture";
             this.buttonCapture.Size = new System.Drawing.Size(75, 23);
-            this.buttonCapture.TabIndex = 10;
+            this.buttonCapture.TabIndex = 11;
             this.buttonCapture.Text = "&Capture";
             this.buttonCapture.UseVisualStyleBackColor = true;
             this.buttonCapture.Click += new System.EventHandler(this.buttonCapture_Click);
@@ -185,6 +197,7 @@
             this.Controls.Add(this.labelPreview);
             this.Controls.Add(this.comboBoxMode);
             this.Controls.Add(this.labelMode);
+            this.Controls.Add(this.buttonBrowse);
             this.Controls.Add(this.comboBoxOutputDirectory);
             this.Controls.Add(this.labelOutputDirectory);
             this.Controls.Add(this.buttonRefresh);
@@ -192,6 +205,7 @@
             this.Controls.Add(this.labelWindows);
             this.Name = "FormMain";
             this.Text = "Window Capture";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.formClosed);
             this.Load += new System.EventHandler(this.load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPreviewTime)).EndInit();
             this.ResumeLayout(false);
@@ -207,6 +221,7 @@
         private System.Windows.Forms.Button buttonRefresh;
         private System.Windows.Forms.Label labelOutputDirectory;
         private System.Windows.Forms.ComboBox comboBoxOutputDirectory;
+        private System.Windows.Forms.Button buttonBrowse;
         private System.Windows.Forms.Label labelMode;
         private System.Windows.Forms.ComboBox comboBoxMode;
         private System.Windows.Forms.Label labelPreview;
