@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using WindowCapture.Properties;
 
 namespace WindowCapture
 {
@@ -29,6 +30,25 @@ namespace WindowCapture
             comboBoxMode.SelectedIndex = 0;
             formPreview = new FormPreview();
             selectDirectoryDialog = new SelectDirectoryDialog(true);
+
+            try
+            {
+                Settings settings = Settings.Default;
+
+                for (int i = 0; i < comboBoxMode.Items.Count; ++i)
+                {
+                    if (comboBoxMode.Items[i].ToString() == settings.Mode)
+                    {
+                        comboBoxMode.SelectedIndex = i;
+                        break;
+                    }
+                }
+
+                numericUpDownPreviewTime.Value = settings.Preview;
+            }
+            catch
+            {
+            }
         }
 
         #endregion
@@ -80,7 +100,7 @@ namespace WindowCapture
         {
             listViewWindows.SmallImageList.Images.Clear();
             items.Clear();
-            
+
             foreach (WindowData windowData in WindowManager.GetWindows().OrderBy(n => n.ToString()))
             {
                 items.Add(ToListViewItem(windowData));
@@ -211,13 +231,28 @@ namespace WindowCapture
 
         private void formClosed(object sender, FormClosedEventArgs e)
         {
+            try
+            {
+                Settings settings = Settings.Default;
+                settings.Mode = comboBoxMode.Text;
+                settings.Preview = (uint)numericUpDownPreviewTime.Value;
+                settings.Save();
+            }
+            catch
+            {
+            }
+
             selectDirectoryDialog.Dispose();
         }
 
         private void load(object sender, EventArgs e)
         {
             DoRefresh();
-            comboBoxOutputDirectory.Text = Application.StartupPath;
+
+            if (string.IsNullOrEmpty(comboBoxOutputDirectory.Text))
+            {
+                comboBoxOutputDirectory.Text = Application.StartupPath;
+            }
         }
     }
 }

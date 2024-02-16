@@ -87,8 +87,8 @@
             // 
             this.checkBoxVisible.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBoxVisible.AutoSize = true;
-            this.checkBoxVisible.Checked = true;
-            this.checkBoxVisible.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxVisible.Checked = global::WindowCapture.Properties.Settings.Default.VisibleOnly;
+            this.checkBoxVisible.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::WindowCapture.Properties.Settings.Default, "VisibleOnly", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.checkBoxVisible.Location = new System.Drawing.Point(12, 366);
             this.checkBoxVisible.Name = "checkBoxVisible";
             this.checkBoxVisible.Size = new System.Drawing.Size(86, 16);
@@ -123,11 +123,13 @@
             this.comboBoxOutputDirectory.AllowDrop = true;
             this.comboBoxOutputDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBoxOutputDirectory.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::WindowCapture.Properties.Settings.Default, "OutputDirectory", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.comboBoxOutputDirectory.FormattingEnabled = true;
             this.comboBoxOutputDirectory.Location = new System.Drawing.Point(110, 388);
             this.comboBoxOutputDirectory.Name = "comboBoxOutputDirectory";
             this.comboBoxOutputDirectory.Size = new System.Drawing.Size(599, 20);
             this.comboBoxOutputDirectory.TabIndex = 5;
+            this.comboBoxOutputDirectory.Text = global::WindowCapture.Properties.Settings.Default.OutputDirectory;
             this.comboBoxOutputDirectory.DragDrop += new System.Windows.Forms.DragEventHandler(this.comboBoxOutputDirectory_DragDrop);
             this.comboBoxOutputDirectory.DragEnter += new System.Windows.Forms.DragEventHandler(this.comboBoxOutputDirectory_DragEnter);
             // 
@@ -185,11 +187,6 @@
             this.numericUpDownPreviewTime.Size = new System.Drawing.Size(120, 19);
             this.numericUpDownPreviewTime.TabIndex = 10;
             this.numericUpDownPreviewTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.numericUpDownPreviewTime.Value = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
             // 
             // buttonCapture
             // 

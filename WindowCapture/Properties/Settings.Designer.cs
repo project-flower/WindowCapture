@@ -22,5 +22,53 @@ namespace WindowCapture.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("CopyFromScreen")]
+        public string Mode {
+            get {
+                return ((string)(this["Mode"]));
+            }
+            set {
+                this["Mode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OutputDirectory {
+            get {
+                return ((string)(this["OutputDirectory"]));
+            }
+            set {
+                this["OutputDirectory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2000")]
+        public uint Preview {
+            get {
+                return ((uint)(this["Preview"]));
+            }
+            set {
+                this["Preview"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool VisibleOnly {
+            get {
+                return ((bool)(this["VisibleOnly"]));
+            }
+            set {
+                this["VisibleOnly"] = value;
+            }
+        }
     }
 }
