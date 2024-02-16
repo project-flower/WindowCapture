@@ -22,6 +22,13 @@ namespace NativeMethods
         public const int HICONSM = -34;
     }
 
+    public static partial class ICON
+    {
+        public static readonly UIntPtr SMALL = new UIntPtr(0);
+        public static readonly UIntPtr BIG = new UIntPtr(1);
+        public static readonly UIntPtr SMALL2 = new UIntPtr(2);
+    }
+
     public static partial class User32
     {
         [DllImport(AssemblyName)]
@@ -42,7 +49,20 @@ namespace NativeMethods
         public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
 
         [DllImport(AssemblyName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsWindowVisible(IntPtr hWnd);
+
+        [DllImport(AssemblyName)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hdcBlt, uint nFlags);
+
+        [DllImport(AssemblyName, CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr SendMessageTimeout(IntPtr hWnd, uint Msg, UIntPtr wParam, IntPtr lParam, uint fuFlags, uint uTimeout, [Optional] out UIntPtr lpdwResult);
+    }
+
+    public static partial class WM
+    {
+        public const uint GETICON = 0x007F;
     }
 
     public delegate bool WNDENUMPROC(IntPtr hWnd, IntPtr lParam);

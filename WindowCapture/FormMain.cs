@@ -128,7 +128,19 @@ namespace WindowCapture
             ImageList imageList = listViewWindows.SmallImageList;
             ListViewItem result = null;
             string title = windowData.Title;
-            IntPtr hIcon = User32.GetClassLongPtr(windowData.Handle, GCL.HICONSM);
+            UIntPtr messageResult;
+            IntPtr handle = windowData.Handle;
+            IntPtr hIcon = IntPtr.Zero;
+
+            if (User32.SendMessageTimeout(handle, WM.GETICON, ICON.SMALL2, IntPtr.Zero, 0, 500, out messageResult) != IntPtr.Zero)
+            {
+                hIcon = new IntPtr((int)messageResult);
+            }
+
+            if (hIcon == IntPtr.Zero)
+            {
+                hIcon = User32.GetClassLongPtr(handle, GCL.HICONSM);
+            }
 
             if (hIcon != IntPtr.Zero)
             {
