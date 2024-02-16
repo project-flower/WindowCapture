@@ -16,14 +16,20 @@ namespace WindowCapture
             get;
         }
 
+        public bool Visible
+        {
+            get;
+        }
+
         #endregion
 
         #region Public Methods
 
-        public WindowData(IntPtr handle, string title)
+        public WindowData(IntPtr handle, string title, bool visible)
         {
             Handle = handle;
             Title = title;
+            Visible = visible;
         }
 
         public override string ToString()

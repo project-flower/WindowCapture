@@ -33,6 +33,7 @@
             this.listViewWindows = new System.Windows.Forms.ListView();
             this.columnHeaderTitle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.imageList = new System.Windows.Forms.ImageList(this.components);
+            this.checkBoxVisible = new System.Windows.Forms.CheckBox();
             this.buttonRefresh = new System.Windows.Forms.Button();
             this.labelOutputDirectory = new System.Windows.Forms.Label();
             this.comboBoxOutputDirectory = new System.Windows.Forms.ComboBox();
@@ -66,7 +67,7 @@
             this.listViewWindows.Location = new System.Drawing.Point(12, 24);
             this.listViewWindows.MultiSelect = false;
             this.listViewWindows.Name = "listViewWindows";
-            this.listViewWindows.Size = new System.Drawing.Size(695, 356);
+            this.listViewWindows.Size = new System.Drawing.Size(695, 336);
             this.listViewWindows.SmallImageList = this.imageList;
             this.listViewWindows.TabIndex = 1;
             this.listViewWindows.UseCompatibleStateImageBehavior = false;
@@ -82,13 +83,27 @@
             this.imageList.ImageSize = new System.Drawing.Size(16, 16);
             this.imageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
+            // checkBoxVisible
+            // 
+            this.checkBoxVisible.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkBoxVisible.AutoSize = true;
+            this.checkBoxVisible.Checked = true;
+            this.checkBoxVisible.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxVisible.Location = new System.Drawing.Point(12, 366);
+            this.checkBoxVisible.Name = "checkBoxVisible";
+            this.checkBoxVisible.Size = new System.Drawing.Size(86, 16);
+            this.checkBoxVisible.TabIndex = 2;
+            this.checkBoxVisible.Text = "&Visible Only";
+            this.checkBoxVisible.UseVisualStyleBackColor = true;
+            this.checkBoxVisible.CheckedChanged += new System.EventHandler(this.checkBoxVisible_CheckedChanged);
+            // 
             // buttonRefresh
             // 
             this.buttonRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonRefresh.Location = new System.Drawing.Point(713, 24);
             this.buttonRefresh.Name = "buttonRefresh";
             this.buttonRefresh.Size = new System.Drawing.Size(75, 23);
-            this.buttonRefresh.TabIndex = 2;
+            this.buttonRefresh.TabIndex = 3;
             this.buttonRefresh.Text = "&Refresh";
             this.buttonRefresh.UseVisualStyleBackColor = true;
             this.buttonRefresh.Click += new System.EventHandler(this.buttonRefresh_Click);
@@ -201,6 +216,7 @@
             this.Controls.Add(this.comboBoxOutputDirectory);
             this.Controls.Add(this.labelOutputDirectory);
             this.Controls.Add(this.buttonRefresh);
+            this.Controls.Add(this.checkBoxVisible);
             this.Controls.Add(this.listViewWindows);
             this.Controls.Add(this.labelWindows);
             this.Name = "FormMain";
@@ -218,6 +234,7 @@
         private System.Windows.Forms.Label labelWindows;
         private System.Windows.Forms.ListView listViewWindows;
         private System.Windows.Forms.ColumnHeader columnHeaderTitle;
+        private System.Windows.Forms.CheckBox checkBoxVisible;
         private System.Windows.Forms.Button buttonRefresh;
         private System.Windows.Forms.Label labelOutputDirectory;
         private System.Windows.Forms.ComboBox comboBoxOutputDirectory;

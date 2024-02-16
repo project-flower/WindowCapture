@@ -73,7 +73,7 @@ namespace WindowCapture
 
             if (!string.IsNullOrEmpty(windowName))
             {
-                list.Add(new WindowData(hWnd, windowName));
+                list.Add(new WindowData(hWnd, windowName, User32.IsWindowVisible(hWnd)));
             }
 
             return true;

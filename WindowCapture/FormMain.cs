@@ -1,5 +1,6 @@
 ﻿using NativeMethods;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace WindowCapture
         #region Private Fields
 
         private readonly FormPreview formPreview;
+        private readonly List<ListViewItem> items = new List<ListViewItem>();
         private readonly SelectDirectoryDialog selectDirectoryDialog;
 
         #endregion
@@ -76,12 +78,39 @@ namespace WindowCapture
 
         private void DoRefresh()
         {
-            listViewWindows.Items.Clear();
             listViewWindows.SmallImageList.Images.Clear();
-            WindowData[] windows = WindowManager.GetWindows();
-            windows = windows.OrderBy(n => n.ToString()).ToArray();
-            Array.ForEach(windows, n => listViewWindows.Items.Add(ToListViewItem(n)));
-            listViewWindows.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            items.Clear();
+            
+            foreach (WindowData windowData in WindowManager.GetWindows().OrderBy(n => n.ToString()))
+            {
+                items.Add(ToListViewItem(windowData));
+            }
+
+            FilterVisible();
+        }
+
+        private void FilterVisible()
+        {
+            bool visibleOnly = checkBoxVisible.Checked;
+            listViewWindows.Items.Clear();
+            listViewWindows.BeginUpdate();
+
+            try
+            {
+                foreach (ListViewItem item in items)
+                {
+                    if (!visibleOnly || ((WindowData)item.Tag).Visible)
+                    {
+                        listViewWindows.Items.Add(item);
+                    }
+                }
+
+                listViewWindows.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            }
+            finally
+            {
+                listViewWindows.EndUpdate();
+            }
         }
 
         private void ShowErrorMessage(string message)
@@ -143,6 +172,11 @@ namespace WindowCapture
         private void buttonRefresh_Click(object sender, EventArgs e)
         {
             DoRefresh();
+        }
+
+        private void checkBoxVisible_CheckedChanged(object sender, EventArgs e)
+        {
+            FilterVisible();
         }
 
         private void comboBoxOutputDirectory_DragDrop(object sender, DragEventArgs e)
